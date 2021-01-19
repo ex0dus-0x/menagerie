@@ -1,6 +1,6 @@
 package windows
 
-// #cgo CFLAGS: -g -Wall
+// #cgo CFLAGS: -g -Wall -fexceptions
 // #include "antidbg.h"
 // #include "antivm.h"
 import "C"

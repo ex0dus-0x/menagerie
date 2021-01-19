@@ -5,7 +5,7 @@ package ems
 import (
     "runtime"
     "github.com/ex0dus-0x/ems/windows"
-    //"github.com/ex0dus-0x/ems/linux"
+    "github.com/ex0dus-0x/ems/linux"
     //"github.com/ex0dus-0x/ems/macos"
 )
 
@@ -16,12 +16,11 @@ import (
 func AntiDebugging() bool {
     if runtime.GOOS == "windows" {
         return windows.WindowsDebugging()
-    }
-
-    /*
-    else if runtime.GOOS == "linux" {
+    } else if runtime.GOOS == "linux" {
         return linux.LinuxDebugging()
-    } else if runtime.GOOS == "macos" {
+    }
+    /*
+    else if runtime.GOOS == "macos" {
         return macos.MacDebugging()
     }
     */
