@@ -5,8 +5,9 @@
 
 #if defined(WIN32) || defined(WIN64)
 
-#include <Windows.h>
-
+#include <windows.h>
+#include <winternl.h>
+#include <excpt.h>
 
 /* CheckBeingDebuggedPEB() - debug flags
  *
