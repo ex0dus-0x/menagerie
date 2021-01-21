@@ -2,29 +2,17 @@
 // routine based on specific platform the adversarial sample is on.
 package ems
 
-import (
-    "runtime"
-    "github.com/ex0dus-0x/ems/windows"
-    "github.com/ex0dus-0x/ems/linux"
-    //"github.com/ex0dus-0x/ems/macos"
-)
+import "github.com/ex0dus-0x/ems/linux"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
 // Cross-platform function used to detect if a debugger is currently hooked onto the
 // current executable.
 func AntiDebugging() bool {
-    if runtime.GOOS == "windows" {
-        return windows.WindowsDebugging()
-    } else if runtime.GOOS == "linux" {
-        return linux.LinuxDebugging()
+    // basic: PTRACE_TRACEME antidebug check
+    if linux.CheckPtrace() == true {
+        return true
     }
-    /*
-    else if runtime.GOOS == "macos" {
-        return macos.MacDebugging()
-    }
-    */
-
     return false
 }
 
@@ -38,15 +26,6 @@ func AntiDebuggingCb(cb func()) {
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 func AntiSandbox() bool {
-    /*
-    if runtime.GOOS == "windows" {
-        return WindowsSandbox()
-    } else if runtime.GOOS == "linux" {
-        return LinuxSandbox()
-    } else if runtime.GOOS == "macos" {
-        return MacSandbox()
-    }
-    */
     return false
 }
 
@@ -56,7 +35,6 @@ func AntiSandboxCb(cb func()) {
         cb()
     }
 }
-
 
 /*=========================== ANTI-DISASSEMBLY ===========================*/
 
