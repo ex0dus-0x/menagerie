@@ -4,20 +4,10 @@ import "syscall"
 
 // Simplest form of anti-debug on Linux using `ptrace`.
 func CheckPtrace() bool {
-    if err := syscall.PtraceAttach(0); err != nil {
+    // check for debugger
+    _, _, res := syscall.RawSyscall(syscall.SYS_PTRACE, uintptr(syscall.PTRACE_TRACEME), 0, 0)
+    if res == 1 {
         return true
     }
-    return false
-}
-
-// Main routine used in detecting debuggers for Linux, calling every known technique and
-// returning a bool for later consumption
-func LinuxDebugging() bool {
-
-    // basic: ptrace check
-    if CheckPtrace() == true {
-        return true
-    }
-
     return false
 }

@@ -21,25 +21,3 @@ func CheckNtGlobalFlagPEB() bool {
 func CheckBreakpoint() bool {
     return bool(C.CheckBreakpoint())
 }
-
-// Main routine used in detecting debuggers in Windows, calls every known technique in the library
-// and returns a bool for later consumption.
-func WindowsDebugging() bool {
-
-    // basic: BeingDebugged PEB check
-    if CheckBeingDebuggedPEB() {
-        return true
-    }
-
-    // basic: NtGlobalFlag PEB check
-    if CheckNtGlobalFlagPEB() {
-        return true
-    }
-
-    // basic: breakpoint
-    if CheckBreakpoint() {
-        return true
-    }
-
-    return false
-}
