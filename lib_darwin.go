@@ -2,7 +2,7 @@
 // routine based on specific platform the adversarial sample is on.
 package ems
 
-import "github.com/ex0dus-0x/ems/macos"
+//import "github.com/ex0dus-0x/ems/macos"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
