@@ -1,20 +1,29 @@
-package macos
+package linux
 
-import "syscall"
+import (
+    "syscall"
+    "os/signal"
+)
 
-// Simplest form of anti-debug on macOS using `ptrace` with `PT_DENY_ATTACH`, called twice to
-// ensure that the detection works if any hooking is done on the `ptrace` call itself
+// Simplest form of anti-debug on macOS, attempting to trigger and catch a SEGV when attempting
+// to `ptrace` with PT_DENY_ATTACH
 func CheckPtrace() bool {
-    state := 0
+    // stores final state that gets changed
+    debugged := false
 
-    // check for debugger - first called may be hooked
-    if _, _, res := syscall.RawSyscall(syscall.SYS_PTRACE, uintptr(syscall.PT_DENY_ATTACH), 0, 0); res == 1 {
-        state = 1
+    sigchan := make(chan os.Signal, 1)
+    exitchan := make(chan bool, 1)
 
-        // check for debugger again - second call to double-check
-        if _, _, res := syscall.RawSyscall(syscall.SYS_PTRACE, uintptr(syscall.PT_DENY_ATTACH), 0, 0); res == 1 {
-            state = 2
-        }
-    }
-    return state == 2
+    signal.Notify(sigchan, syscall.SIGSEGV)
+    go func() {
+        sig := <-sigchan
+        debugged = true
+        exitchan <- true
+    }()
+
+    // check for debugger - first call may be hooked
+    syscall.RawSyscall(syscall.SYS_PTRACE, uintptr(syscall.PT_DENY_ATTACH), 0, 0)
+
+    <-exitchan
+    return debugged
 }
