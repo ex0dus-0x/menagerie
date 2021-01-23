@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#if defined(WIN32) || defined(WIN64)
+#if _WIN32 || __WIN64
 
 #include <windows.h>
 #include <winternl.h>
@@ -57,7 +57,7 @@ bool CheckNtGlobalFlagPEB(void)
 bool CheckBreakpoint(void) 
 {
     __try {
-        __asm int 3;
+        __asm { int 3 };
         return true;
     } __except (EXCEPTION_EXECUTE_HANDLER) {
         return false;

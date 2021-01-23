@@ -2,13 +2,17 @@
 // routine based on specific platform the adversarial sample is on.
 package ems
 
-//import "github.com/ex0dus-0x/ems/macos"
+import "github.com/ex0dus-0x/ems/macos"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
 // Cross-platform function used to detect if a debugger is currently hooked onto the
 // current executable.
 func AntiDebugging() bool {
+    // basic: PT_DENY_ALLOW antidebug check
+    if macos.CheckPtrace() == true {
+        return true
+    }
     return false
 }
 
