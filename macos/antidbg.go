@@ -11,9 +11,13 @@ func CheckPtrace() bool {
     // stores final state that gets changed
     debugged := false
 
+    // create channel to collect signals
     sigchan := make(chan os.Signal, 1)
+
+    // create channel to trigger return
     exitchan := make(chan bool, 1)
 
+    // get only SIGSEGVs
     signal.Notify(sigchan, syscall.SIGSEGV)
     go func() {
         sig := <-sigchan
