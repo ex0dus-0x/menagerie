@@ -26,6 +26,10 @@ func AntiDebuggingCb(cb func()) {
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 func AntiSandbox() bool {
+    // basic: check `hw.model`
+    if macos.CheckHardwareFingerprint() {
+        return true
+    }
     return false
 }
 
