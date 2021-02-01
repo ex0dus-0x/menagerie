@@ -9,17 +9,13 @@ import "github.com/ex0dus-0x/ems/windows"
 // Cross-platform function used to detect if a debugger is currently hooked onto the
 // current executable.
 func AntiDebugging() bool {
-    // basic: BeingDebugged PEB check
-    if windows.CheckBeingDebugged() == true{
+
+    // basic PEB fingerprinting check
+    if windows.CheckDebuggerPEB() == true{
         return true
     }
 
-    // basic: NtGlobalFlag PEB check
-    if windows.CheckNtGlobalFlagPEB() == true {
-        return true
-    }
-
-    // basic: check if breakpoint is set
+    // checks to see if breakpoint has been placed
     if windows.CheckBreakpoint() == true {
         return true
     }

@@ -1,20 +1,14 @@
 package windows
 
 // #cgo CFLAGS: -Wall
-// #include "antidbg.h"
-// #include "antivm.h"
+// #include "antidbg.hpp"
+// #include "antivm.hpp"
 import "C"
 
 // Wrapper function for checking `BeingDebugged` in Process Environment Block
 // Mitigation: plugin that automatically patches PEB
-func CheckBeingDebuggedPEB() bool {
-    return bool(C.CheckBeingDebuggedPEB())
-}
-
-// Wrapper function for checking `NtGlobalFlags` in Process Environment Block
-// Mitigation: plugin that automatically patches PEB
-func CheckNtGlobalFlagPEB() bool {
-    return bool(C.CheckNtGlobalFlagPEB())
+func CheckDebuggerPEB() bool {
+    return bool(C.CheckDebuggerPEB())
 }
 
 // Wrapper function for checking if adding breakpoint is possible
