@@ -1,16 +1,16 @@
 # Eat My Shorts
 
-Tiny cross-platform malware development library for anti-reversing evasion techniques
+Cross-platform malware development library for anti-reversing techniques
 
 ## Introduction
 
-Developing a custom malware/payload for a red team engagement? Using Golang because you love the cross-platform and 
-static compilation support?
+Looking to frustrate analysts and advanced EDR capabilities from understanding your malware implant?
 
-## Techniques Employed
+## Goals
 
-### Anti-Debugging
-
-### Anti-Disassembly
-
-### Anti-Sandboxing
+* Build a rich interface for defense evasion for Golang, a popular choice for red teams and malware devs.
+    * Cross-platform and static compilation support!
+* Utilize defensive software development to make reverse engineering difficult
+    * Reduce use of functions / `call`s, maximize inlining assembly
+* Use as a learning resource for both attack and mitigation, and a collaborative project to contribute 
+new techniques
