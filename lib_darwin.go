@@ -9,7 +9,7 @@ import "github.com/ex0dus-0x/ems/macos"
 // Cross-platform function used to detect if a debugger is currently hooked onto the
 // current executable.
 func AntiDebugging() bool {
-    // basic: PT_DENY_ALLOW antidebug check
+    // basic ptrace check
     if macos.CheckPtrace() == true {
         return true
     }
@@ -26,7 +26,7 @@ func AntiDebuggingCb(cb func()) {
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 func AntiSandbox() bool {
-    // basic: check `hw.model`
+    // check sysctl configurations
     if macos.CheckHardwareFingerprint() {
         return true
     }

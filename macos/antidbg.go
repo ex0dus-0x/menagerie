@@ -1,13 +1,11 @@
-package linux
+package macos
 
-import (
-    "syscall"
-    "os/signal"
-)
+// #include "antidbg.hpp"
+import "C"
 
 // Simplest form of anti-debug on macOS, attempting to trigger and catch a SEGV when attempting
-// to `ptrace` with PT_DENY_ATTACH
-func CheckPtrace() bool {
+// to `ptrace` with PT_DENY_ATTACH.
+func CheckStealthyPtrace() bool {
     // stores final state that gets changed
     debugged := false
 

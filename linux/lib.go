@@ -6,6 +6,6 @@ import "C"
 
 // Wrapper function for deploying basic dynamically loaded `ptrace` detection.
 // Mitigation: Noop out instructions from manual analysis
-func CheckPtrace() bool {
+func CheckStealthyPtrace() bool {
     return bool(C.CheckPtrace())
 }
