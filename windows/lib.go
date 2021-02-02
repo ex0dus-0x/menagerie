@@ -3,6 +3,7 @@ package windows
 // #cgo CFLAGS: -Wall
 // #include "antidbg.hpp"
 // #include "antivm.hpp"
+// #include "antidisass.hpp"
 import "C"
 
 // Wrapper function for checking `BeingDebugged` in Process Environment Block

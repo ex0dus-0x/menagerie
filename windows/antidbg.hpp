@@ -45,17 +45,19 @@ bool CheckDebuggerPEB(void)
 
     // parse out pointer to heap from PEB, and two attributes' offsets for antidebug
 #ifdef _WIN32
-    PVOID pHeap = (PVOID)((PBYTE) pPeb + 0x18);
+    PVOID pHeap = (PVOID)(*(PDWORD_PTR)((PBYTE)pPeb + 0x18));
     DWORD Flags = *(PDWORD)((PBYTE) pHeap + 0x40);
     DWORD ForceFlags = *(PDWORD)((PBYTE) pHeap + 0x44);
 #else
-    PVOID pHeap = (PVOID)((PBYTE) pPeb + 0x30);
+    PVOID pHeap = (PVOID)(*(PDWORD_PTR)((PBYTE)pPeb + 0x30));
     DWORD Flags = *(PDWORD)((PBYTE pHeap + 0x70);
     DWORD ForceFlags = *(PDWORD)((PBYTE pHeap + 0x74);
 #endif
 
     if (Flags & ~HEAP_GROWABLE || ForceFlags)
         return true;
+
+    // TODO: Heap Protection
 
     // not being debugged!
     return false;
