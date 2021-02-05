@@ -6,11 +6,6 @@
 #include <dlfcn.h>
 #include <sys/ptrace.h>
 
-/* CheckStealthyPtrace()
- *
- *      Defines a basic PTRACE_TRACEME implementation that dynamically loads the
- *      `ptrace` syscall from libc to mitigate the detection of symbols in static analysis
- */
 bool CheckStealthyPtrace(void)
 {
     void *handle;
@@ -31,4 +26,13 @@ bool CheckStealthyPtrace(void)
 
     return false;
 }
+
+
+// TODO
+bool CheckBreakpoint(void)
+{
+    //__asm__("int 3");
+    return false;
+}
+
 #endif

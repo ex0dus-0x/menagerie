@@ -15,18 +15,14 @@ func AntiDebugging() bool {
     if CheckStealthyPtrace() == true {
         return true
     }
-    return false
-}
 
-// Runs cross-platform anti-debug detection, and run a callback routine if debugging is detected.
-func AntiDebuggingCb(cb func()) {
-    if AntiDebugging() == true {
-        cb()
-    }
+    return false
 }
 
 //// WRAPPERS ////
 
+// Defines a basic antidebug implementation that dynamically loads ptrace
+// from libc to mitigate the detection of symbols in static analysis
 func CheckStealthyPtrace() bool {
     return bool(C.CheckStealthyPtrace())
 }
@@ -36,13 +32,6 @@ func CheckStealthyPtrace() bool {
 // Main routine to call to execute all known sandbox/VM detection heuristics.
 func AntiSandbox() bool {
     return false
-}
-
-// Runs cross-platform anti-sandbox detection, and run a callback routine if debugging is detected.
-func AntiSandboxCb(cb func()) {
-    if AntiSandbox() == true {
-        cb()
-    }
 }
 
 /*=========================== ANTI-DISASSEMBLY ===========================*/

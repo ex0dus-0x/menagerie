@@ -18,15 +18,10 @@ func AntiDebugging() bool {
     return false
 }
 
-// Runs cross-platform anti-debug detection, and run a callback routine if debugging is detected.
-func AntiDebuggingCb(cb func()) {
-    if AntiDebugging() == true {
-        cb()
-    }
-}
-
 //// WRAPPERS ////
 
+// Defines a basic PT_DENY_ATTACH implementation that dynamically loads 
+// ptrace to mitigate detection of symbols in static analysis.
 func CheckStealthyPtrace() bool {
     return bool(C.CheckStealthyPtrace())
 }
@@ -34,18 +29,12 @@ func CheckStealthyPtrace() bool {
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 func AntiSandbox() bool {
+
     // check sysctl configurations
     if macos.CheckHardwareFingerprint() {
         return true
     }
     return false
-}
-
-// Runs cross-platform anti-sandbox detection, and run a callback routine if debugging is detected.
-func AntiSandboxCb(cb func()) {
-    if AntiSandbox() == true {
-        cb()
-    }
 }
 
 /*=========================== ANTI-DISASSEMBLY ===========================*/

@@ -11,11 +11,15 @@
 #include <mach/task.h>
 #include <mach/mach_init.h>
 
-/* CheckStealthyPtrace()
- *
- *      Defines a basic PT_DENY_ATTACH implementation that dynamically
- *      loads the `ptrace` syscall to mitigate detection of symbols in static analysis.
- */
+static bool isDebugged = false;
+
+
+/* invoked when `ptrace` panics */
+void handler(int sig) 
+{
+    isDebugged = true;
+}
+
 bool CheckStealthyPtrace(void)
 {
     void *handle;
@@ -30,20 +34,12 @@ bool CheckStealthyPtrace(void)
     handle = dlopen(libc_path, RTLD_LAZY);
     cb = dlsym(handle, call);
 
-    // TODO: exception handler for SIGSEGV
-    try {
-        cb(PT_DENY_ATTACH, 0, 0, 0);
-    catch (..) {
-        return true;
-    }
-
+    // exception handler for SIGSEGV
+    signal(SIGINT, handler);
+    cb(PT_DENY_ATTACH, 0, 0, 0);
     return false;
 }
 
-/* CheckExceptionHandler()
- *
- *           
- */
 bool CheckExceptionHandler(void)
 {
     mach_msg_type_number_t count = 0;       // uint32_t
@@ -69,5 +65,4 @@ bool CheckExceptionHandler(void)
     }
     return false;
 }
-
 #endif
