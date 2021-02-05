@@ -3,9 +3,4 @@
 
 #include <stdbool.h>
 
-bool CheckSysctl() 
-{
-    return false;
-}
-
 #endif

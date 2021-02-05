@@ -1,12 +1,12 @@
-# Eat My Shorts
+# The Anti-Analysis Menagerie
 
-Cross-platform malware development library for anti-reversing techniques
+Cross-platform malware development library for anti-analysis
 
 ## Introduction
 
 Looking to frustrate analysts and advanced EDR capabilities from understanding your malware implant?
 
-## Goals
+## Design Goals
 
 * Build a rich interface for defense evasion for Golang, a popular choice for red teams and malware devs.
     * Cross-platform and static compilation support!

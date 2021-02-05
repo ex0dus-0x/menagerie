@@ -13,13 +13,7 @@ import "C"
 //  - Process Environment Block
 //  - Breakpoint Check
 func AntiDebugging() bool {
-
-    // basic PEB fingerprinting check
-    if CheckDebuggerPEB() == true {
-        return true
-    }
-
-    return false
+    return CheckDebuggerPEB()
 }
 
 //// WRAPPERS ////
@@ -38,13 +32,7 @@ func CheckDebuggerPEB() bool {
 // Main routine to call to execute all known sandbox/VM detection heuristics.
 //  - CPUID hypervisor check
 func AntiSandbox() bool {
-
-    // check with classic `cpuid` instruction
-    if CheckCPUIDHypervisor() == true {
-        return true
-    }
-
-    return false
+    return CheckCPUIDHypervisor()
 }
 
 //// WRAPPERS ////
