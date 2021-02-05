@@ -4,14 +4,6 @@
 #include <stdbool.h>
 #include <winternl.h>
 
-/* CheckDebuggerPEB()
- *
- *      Checks the state of the Process Environment Block for the
- *      following properties for the presence of a debugger:
- *          - BeingDebugged
- *          - NtGlobalFlag
- *          - ForceFlags and Flags in ProcessHeap
- */
 bool CheckDebuggerPEB(void)
 {
     // parse out the PEB from FS or GS offsets
@@ -60,26 +52,6 @@ bool CheckDebuggerPEB(void)
     // TODO: Heap Protection
 
     // not being debugged!
-    return false;
-}
-
-/* CheckBreakpoint()
- *
- *      Checks to see if setting a breakpoint is possible, since that can only occur with a 
- *      debugger attached.
- */
-bool CheckBreakpoint(void) 
-{
-    return false;
-}
-
-/* CheckTrapFlag()
- *
- *      Check to see if a debugger cleared the trap flag to prevent certain
- *      exceptions from showing up
- */
-bool CheckTrapFlag(void)
-{
     return false;
 }
 

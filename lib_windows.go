@@ -11,7 +11,7 @@ import "C"
 
 // Main routine to call to execute all known debugger detection heuristics.
 //  - Process Environment Block
-//  - Breakpoint Detection
+//  - Breakpoint Check
 func AntiDebugging() bool {
 
     // basic PEB fingerprinting check
@@ -19,29 +19,18 @@ func AntiDebugging() bool {
         return true
     }
 
-    // checks to see if breakpoint has been placed
-    if CheckBreakpoint() == true {
-        return true
-    }
-
     return false
-}
-
-// Runs anti-debug detection, and run a callback routine if debugging is detected.
-func AntiDebuggingCb(cb func()) {
-    if AntiDebugging() == true {
-        cb()
-    }
 }
 
 //// WRAPPERS ////
 
+// Checks the state of the Process Environment Block for the
+// following properties for the presence of a debugger:
+//   - BeingDebugged
+//   - NtGlobalFlag
+//   - ForceFlags and Flags in ProcessHeap
 func CheckDebuggerPEB() bool {
     return bool(C.CheckDebuggerPEB())
-}
-
-func CheckBreakpoint() bool {
-    return bool(C.CheckBreakpoint())
 }
 
 /*=========================== ANTI-SANDBOXING ===========================*/
@@ -56,13 +45,6 @@ func AntiSandbox() bool {
     }
 
     return false
-}
-
-// Runs cross-platform anti-sandbox detection, and run a callback routine if debugging is detected.
-func AntiSandboxCb(cb func()) {
-    if AntiSandbox() == true {
-        cb()
-    }
 }
 
 //// WRAPPERS ////
