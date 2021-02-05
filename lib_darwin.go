@@ -1,16 +1,18 @@
-// Implements main functionality for anti-reversing routines. Will run detection
-// routine based on specific platform the adversarial sample is on.
 package ems
 
-import "github.com/ex0dus-0x/ems/macos"
+// #cgo CFLAGS:
+// #include "macos/antidbg.h"
+// #include "macos/antivm.h"
+import "C"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
-// Cross-platform function used to detect if a debugger is currently hooked onto the
-// current executable.
+ // Main routine to call to execute all known debugger detection heuristics.
+ //  - Stealthy Ptrace
 func AntiDebugging() bool {
-    // basic ptrace check
-    if macos.CheckPtrace() == true {
+
+    // stealthy but still basic ptrace check
+    if CheckStealthyPtrace() == true {
         return true
     }
     return false
@@ -21,6 +23,12 @@ func AntiDebuggingCb(cb func()) {
     if AntiDebugging() == true {
         cb()
     }
+}
+
+//// WRAPPERS ////
+
+func CheckStealthyPtrace() bool {
+    return bool(C.CheckStealthyPtrace())
 }
 
 /*=========================== ANTI-SANDBOXING ===========================*/

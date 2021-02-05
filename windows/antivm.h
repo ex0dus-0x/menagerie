@@ -1,5 +1,5 @@
-#ifndef ANTIVM_HPP
-#define ANTIVM_HPP
+#ifndef ANTIVM_H
+#define ANTIVM_H
 
 #include <stdbool.h>
 #include <cpuid.h>

@@ -1,5 +1,5 @@
-#ifndef ANTIDBG_HPP
-#define ANTIDBG_HPP
+#ifndef ANTIDBG_H
+#define ANTIDBG_H
 
 #include <stdbool.h>
 #include <winternl.h>

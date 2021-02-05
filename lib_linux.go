@@ -1,16 +1,18 @@
-// Implements main functionality for anti-reversing routines. Will run detection
-// routine based on specific platform the adversarial sample is on.
 package ems
 
-import "github.com/ex0dus-0x/ems/linux"
+// #cgo LDFLAGS: -Wl,--no-as-needed -ldl
+// #include "linux/antidbg.h"
+// #include "linux/antivm.h"
+import "C"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
-// Cross-platform function used to detect if a debugger is currently hooked onto the
-// current executable.
+// Main routine to call to execute all known debugger detection heuristics.
+//  - Stealthy Ptrace
 func AntiDebugging() bool {
-    // basic: PTRACE_TRACEME antidebug check
-    if linux.CheckPtrace() == true {
+
+    // stealthy but still basic ptrace check
+    if CheckStealthyPtrace() == true {
         return true
     }
     return false
@@ -23,8 +25,15 @@ func AntiDebuggingCb(cb func()) {
     }
 }
 
+//// WRAPPERS ////
+
+func CheckStealthyPtrace() bool {
+    return bool(C.CheckStealthyPtrace())
+}
+
 /*=========================== ANTI-SANDBOXING ===========================*/
 
+// Main routine to call to execute all known sandbox/VM detection heuristics.
 func AntiSandbox() bool {
     return false
 }
@@ -38,7 +47,7 @@ func AntiSandboxCb(cb func()) {
 
 /*=========================== ANTI-DISASSEMBLY ===========================*/
 
-// Cross-platform function used to inject confusing assembler payloads before sensitive
-// functionality to trick any linear or recursive disassembler.
+// Injects tricky inlined assembly at any point of execution to confuse disassembler
+// and emit confusing disassembly.
 func AntiDisassembly() {
 }
