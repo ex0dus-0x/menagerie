@@ -1,11 +1,10 @@
-package ems
+package menagerie
 
 // #cgo CFLAGS:
 // #include "windows/antidbg.h"
 // #include "windows/antivm.h"
 // #include "windows/antidisass.h"
 import "C"
-
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 

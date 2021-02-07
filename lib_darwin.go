@@ -1,4 +1,4 @@
-package ems
+package menagerie
 
 // #cgo CFLAGS:
 // #include "macos/antidbg.h"
@@ -10,12 +10,7 @@ import "C"
  // Main routine to call to execute all known debugger detection heuristics.
  //  - Stealthy Ptrace
 func AntiDebugging() bool {
-
-    // stealthy but still basic ptrace check
-    if CheckStealthyPtrace() == true {
-        return true
-    }
-    return false
+    return CheckStealthyPtrace()
 }
 
 //// WRAPPERS ////
@@ -29,13 +24,16 @@ func CheckStealthyPtrace() bool {
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 func AntiSandbox() bool {
-
-    // check sysctl configurations
-    if macos.CheckHardwareFingerprint() {
-        return true
-    }
-    return false
+    return CheckSysctl() {
 }
+
+//// WRAPPERS ////
+
+// Defines a virtualization check using sysctl
+func CheckSysctl() bool {
+    return bool(C.CheckSysctl())
+}
+
 
 /*=========================== ANTI-DISASSEMBLY ===========================*/
 

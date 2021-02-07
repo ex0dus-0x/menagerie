@@ -1,4 +1,4 @@
-package ems
+package menagerie
 
 // Runs cross-platform anti-debug detection, and run a callback routine if debugging is detected.
 func AntiDebuggingCb(cb func()) {
