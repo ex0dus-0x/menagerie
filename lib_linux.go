@@ -1,4 +1,4 @@
-package ems
+package menagerie
 
 // #cgo LDFLAGS: -Wl,--no-as-needed -ldl -lc
 // #include "linux/antidbg.h"

@@ -1,3 +1,3 @@
-module github.com/ex0dus-0x/ems
+module github.com/ex0dus-0x/menagerie
 
 go 1.15

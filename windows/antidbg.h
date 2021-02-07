@@ -54,5 +54,4 @@ bool CheckDebuggerPEB(void)
     // not being debugged!
     return false;
 }
-
 #endif

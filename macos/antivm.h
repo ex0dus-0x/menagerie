@@ -6,15 +6,15 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-
-bool CheckSysctl() 
+bool CheckSysctl(void)
 {
-    void *handle;
+    int mib[2];
+    char buf[20];
 
-    // hide away the sysctl call
-    char call[] = "sysctl";
-    char
+    mib[0] = CTL_HW;
+    mib[1] = HW_MODEL;
 
+    sysctl(mib, 2, buf, 20, NULL, 0 );
     return false;
 }
 
