@@ -1,6 +1,6 @@
 package menagerie
 
-// #cgo LDFLAGS: -Wl,--no-as-needed -ldl -lc
+// #cgo CFLAGS:
 // #include "linux/antidbg.h"
 // #include "linux/antivm.h"
 import "C"
@@ -8,19 +8,18 @@ import "C"
 /*=========================== ANTI-DEBUGGING ===========================*/
 
 // Main routine to call to execute all known debugger detection heuristics.
-//  - Stealthy Ptrace
+//  - Ptrace
 //  - Breakpoint Handler Detection
 //  - Procfs Fingerprinting
 func AntiDebugging() bool {
-    return CheckStealthyPtrace() || CheckBreakpoint() || CheckProcessFingerprint()
+    return CheckProcessFingerprint() || CheckBreakpoint() || CheckBasicPtrace() || CheckProcessHeapRelocate()
 }
 
 //// WRAPPERS ////
 
-// Basic anti-debug that dynamically loads ptrace to mitigate the detection 
-// of symbols in static analysis.
-func CheckStealthyPtrace() bool {
-    return bool(C.CheckStealthyPtrace())
+// Most basic Linux anti-debugging call with PTRACE_TRACEME.
+func CheckBasicPtrace() bool {
+    return bool(C.CheckBasicPtrace())
 }
 
 // Detects the presence of a debug by attempting to evoke a debugging SIGTRAP handler 
@@ -34,6 +33,13 @@ func CheckProcessFingerprint() bool {
     return bool(C.CheckProcessFingerprint())
 }
 
+// Checks to see if the debugger has relocated the heap segment elsewhere by allocating space
+// and checking memory offset.
+func CheckProcessHeapRelocate() bool {
+    return bool(C.CheckProcessHeapRelocate())
+}
+
+// TODO: check parent name with readlink
 
 /*=========================== ANTI-SANDBOXING ===========================*/
 

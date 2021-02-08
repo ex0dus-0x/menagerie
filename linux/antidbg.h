@@ -1,20 +1,22 @@
 #ifndef ANTIDBG_H
 #define ANTIDBG_H
 
+#include <stdio.h>
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <dlfcn.h>
 #include <signal.h>
 #include <ctype.h>
 
 #include <sys/ptrace.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 
-/* side effect for signal handling */
-static int isDebugged = -1;
+/* const flag set when signal handling */
+static int isDebugged = 1;
 
 /* handler for switching isDebugged if it first catches SIGTRAP */
 static void handler(int _signum)
@@ -23,6 +25,14 @@ static void handler(int _signum)
     signal(SIGTRAP, SIG_DFL);
 }
 
+bool CheckBasicPtrace(void)
+{
+    if (ptrace(PTRACE_TRACEME, 0, NULL, 0) == -1)
+        return true;
+    return false;
+}
+
+/* TODO: requires dynamic loading, find a way to enable as feature (?)
 bool CheckStealthyPtrace(void)
 {
     void *handle;
@@ -43,18 +53,15 @@ bool CheckStealthyPtrace(void)
 
     return false;
 }
+*/
 
 bool CheckBreakpoint(void)
 {
-    // isDebugged is reverted only if we catch rather than a debugger
-    if (isDebugged == -1) {
-        isDebugged = 1;
-        signal(SIGTRAP, handler);
-        raise(SIGTRAP);
-    }
+    // isDebugged is reverted only if we catch SIGTRAP rather than a debugger
+    signal(SIGTRAP, handler);
+    raise(SIGTRAP);
     return isDebugged;
 }
-
 
 bool CheckProcessFingerprint(void)
 {
@@ -77,18 +84,16 @@ bool CheckProcessFingerprint(void)
     if (!bufptr)
         return false;
 
-    // check to see if value set is = 0
+    // check to see if value set is 0 for no debugger
     for (char *ptr = bufptr + sizeof(tracer) - 1; ptr <= buffer + bytes; ++ptr) 
     {
         if (isspace(*ptr))
             continue;
-        else if ((isdigit(*ptr) != 0) && ((*ptr) != '0'))
-            return true;
+        else
+            return isdigit(*ptr) != 0 && *ptr != '0';
     }
-
     return false;
 }
-
 
 bool CheckProcessHeapRelocate(void)
 {
@@ -96,11 +101,11 @@ bool CheckProcessHeapRelocate(void)
     unsigned char *probe = malloc(0x10);
 
     // check if heap allocated region is in higher memory address range
-    // that denotes that it has been manually relocated.
+    // that denotes that it hasn't been manually relocated.
     if (probe - &bss > 0x20000)
-        return true;
+        return false;
 
-    return false;
+    return true;
 }
 
 #endif
