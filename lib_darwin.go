@@ -8,17 +8,17 @@ import "C"
 /*=========================== ANTI-DEBUGGING ===========================*/
 
  // Main routine to call to execute all known debugger detection heuristics.
- //  - Stealthy Ptrace
+ //  - Ptrace
 func AntiDebugging() bool {
-    return CheckStealthyPtrace()
+    return CheckBasicPtrace()
 }
 
 //// WRAPPERS ////
 
 // Defines a basic PT_DENY_ATTACH implementation that dynamically loads 
 // ptrace to mitigate detection of symbols in static analysis.
-func CheckStealthyPtrace() bool {
-    return bool(C.CheckStealthyPtrace())
+func CheckBasicPtrace() bool {
+    return bool(C.CheckBasicPtrace())
 }
 
 /*=========================== ANTI-SANDBOXING ===========================*/

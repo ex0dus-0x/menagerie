@@ -10,10 +10,8 @@ bool CheckDebuggerPEB(void)
     PPEB pPeb;
 
 #ifdef _WIN32
-    //pPeb = (PPEB)__readfsdword(0x30);
     __asm__("movl %%fs:0x30, %0" : "=r" (pPeb) : : );
 #else
-    //pPeb = (PPEB)__readgsqword(0x60);
     __asm__("movl %%gs:0x60, %0" : "=r" (pPeb) : : );
 #endif // _WIN64
 
