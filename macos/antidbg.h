@@ -2,7 +2,6 @@
 #define ANTIDBG_H
 
 #include <stdbool.h>
-#include <dlfcn.h>
 #include <signal.h>
 
 #include <sys/types.h>
@@ -13,31 +12,17 @@
 
 static bool isDebugged = false;
 
-
 /* invoked when `ptrace` panics */
-void handler(int sig) 
+void handler(int _sig)
 {
     isDebugged = true;
 }
 
-bool CheckStealthyPtrace(void)
+bool CheckBasicPtrace(void)
 {
-    void *handle;
-
-    char call[] = "ptrace";
-    char libc_path = "/usr/lib/libSystem.dylib";
-
-    // function pointer to ptrace with parameters
-    long (*cb)(enum __ptrace_request request, pid_t pid, caddr_t addr, int data);
-
-    // dynamically load the standard dylib and get address to ptrace
-    handle = dlopen(libc_path, RTLD_LAZY);
-    cb = dlsym(handle, call);
-
-    // exception handler for SIGSEGV
     signal(SIGINT, handler);
-    cb(PT_DENY_ATTACH, 0, 0, 0);
-    return false;
+    ptrace(PT_DENY_ATTACH, 0, 0, 0);
+    return isDebugged;
 }
 
 bool CheckExceptionHandler(void)

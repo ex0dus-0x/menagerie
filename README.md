@@ -1,16 +1,17 @@
 # The Anti-Analysis Menagerie
 
-Cross-platform malware development library for anti-analysis
-
-## Introduction
-
-Looking to frustrate analysts and advanced EDR capabilities from understanding your malware implant?
+Cross-platform malware development library for anti-analysis techniques.
 
 ## Design Goals
 
-* Build a rich interface for defense evasion for Golang, a popular choice for red teams and malware devs.
-    * Cross-platform and static compilation support!
-* Utilize defensive software development to make reverse engineering difficult
-    * Reduce use of functions / `call`s, maximize inlining assembly
-* Use as a learning resource for both attack and mitigation, and a collaborative project to contribute 
-new techniques
+* Provide a rich and convenient interface for defensive evasion for Golang, a popular choice for red teams and malware engineers.
+* Incorporate "defensive software development" (ie. minimizing `call`s, confusing control flow) to make reverse engineering even more difficult
+* Use as a learning resource for both attack and mitigation, and a collaborative project to contribute new techniques
+
+## Techniques Supported
+
+* Anti-Debugging
+
+* Anti-Virtualization
+
+* Anti-Disassembly

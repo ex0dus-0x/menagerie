@@ -48,6 +48,12 @@ func AntiSandbox() bool {
     return false
 }
 
+//// WRAPPERS ////
+
+func CheckCPUIDHypervisor() bool {
+    return bool(C.CheckCPUIDHypervisor())
+}
+
 /*=========================== ANTI-DISASSEMBLY ===========================*/
 
 // Injects tricky inlined assembly at any point of execution to confuse disassembler
