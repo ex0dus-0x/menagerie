@@ -1,9 +1,10 @@
 package menagerie
 
-// #cgo CFLAGS:
+// #cgo CFLAGS: -Icommon
 // #include "windows/antidbg.h"
 // #include "windows/antivm.h"
 // #include "windows/antidisass.h"
+// #include "common/cpuid.h"
 import "C"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
@@ -30,7 +31,7 @@ func CheckDebuggerPEB() bool {
 
 // Main routine to call to execute all known sandbox/VM detection heuristics.
 //  - CPUID hypervisor check
-func AntiSandbox() bool {
+func AntiVM() bool {
     return CheckCPUIDHypervisor()
 }
 
