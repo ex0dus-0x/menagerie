@@ -8,8 +8,8 @@ func AntiDebuggingCb(cb func()) {
 }
 
 // Runs cross-platform anti-sandbox detection, and run a callback routine if debugging is detected.
-func AntiSandboxCb(cb func()) {
-    if AntiSandbox() == true {
+func AntiVMCb(cb func()) {
+    if AntiVM() == true {
         cb()
     }
 }

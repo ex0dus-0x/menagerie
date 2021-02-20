@@ -10,8 +10,38 @@ Cross-platform malware development library for anti-analysis techniques.
 
 ## Techniques Supported
 
-* Anti-Debugging
+### Anti-Debugging
 
-* Anti-Virtualization
+|                        | Linux         | Windows                   | macOS    |
+|------------------------|---------------|---------------------------|----------|
+| Basic / Standard       | `ptrace`      | Process Environment Block | `ptrace` |
+| Breakpoint             | SIGTRAP       | WIP                       | WIP      |
+| Process Fingerprinting | Procfs        | WIP                       | WIP      |
+| Memory Fingerprinting  | Heap Relocate | WIP                       | WIP      |
 
-* Anti-Disassembly
+
+### Anti-Virtualization
+
+|               | Linux   | Windows | macOS   |
+|---------------|---------|---------|---------|
+| CPU Profiling | `cpuid` | `cpuid` | sysctl  |
+
+
+### Anti-Disassembly
+
+|                        | Linux | Windows | macOS |
+|------------------------|-------|---------|-------|
+| Impossible Disassembly | ❌     | ✔️      | ❌    |
+
+
+### Contributing
+
+Have another technique you want curated? Create a pull request!
+
+Note that Windows detection techniques should all be MinGW-compliant!
+
+
+## Future Goals
+
+* Linux: eBPF debugger detection
+* Advanced: Anti-EDR / Anti-ML

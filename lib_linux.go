@@ -1,8 +1,9 @@
 package menagerie
 
-// #cgo CFLAGS:
+// #cgo CFLAGS: -Icommon
 // #include "linux/antidbg.h"
 // #include "linux/antivm.h"
+// #include "common/cpuid.h"
 import "C"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
@@ -44,8 +45,8 @@ func CheckProcessHeapRelocate() bool {
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 // Main routine to call to execute all known sandbox/VM detection heuristics.
-func AntiSandbox() bool {
-    return false
+func AntiVM() bool {
+    return CheckCPUIDHypervisor()
 }
 
 //// WRAPPERS ////

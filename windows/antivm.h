@@ -1,22 +1,15 @@
 #ifndef ANTIVM_H
 #define ANTIVM_H
 
-#include <stdint.h>
 #include <stdbool.h>
-#include <cpuid.h>
 
 // TODO
-bool CheckCPUIDHypervisor(void)
+bool CheckInstTiming(void)
 {
-    uint32_t eax, ebx, ecx, edx;
-    eax = 0x40000000;
+    unsigned int bench1 = 0, bench2 = 0;
 
-    asm volatile("cpuid"
-        : "=a" (*eax),
-          "=b" (*ebx),
-          "=c" (*ecx),
-          "=d" (*edx)
-        : "0" (*eax), "2" (*ecx));
+    if ((bench2 - bench1) > 100)
+        return true;
 
     return false;
 }

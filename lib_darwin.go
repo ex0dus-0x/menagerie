@@ -23,8 +23,8 @@ func CheckBasicPtrace() bool {
 
 /*=========================== ANTI-SANDBOXING ===========================*/
 
-func AntiSandbox() bool {
-    return CheckSysctl() {
+func AntiVM() bool {
+    return CheckSysctl()
 }
 
 //// WRAPPERS ////
