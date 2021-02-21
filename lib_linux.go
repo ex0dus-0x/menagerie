@@ -46,13 +46,13 @@ func CheckProcessHeapRelocate() bool {
 
 // Main routine to call to execute all known sandbox/VM detection heuristics.
 func AntiVM() bool {
-    return CheckCPUIDHypervisor()
+    return CheckCPUID()
 }
 
 //// WRAPPERS ////
 
-func CheckCPUIDHypervisor() bool {
-    return bool(C.CheckCPUIDHypervisor())
+func CheckCPUID() bool {
+    return bool(C.CheckCPUID())
 }
 
 /*=========================== ANTI-DISASSEMBLY ===========================*/
