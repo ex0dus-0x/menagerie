@@ -1,6 +1,7 @@
 package menagerie
 
 // #cgo CFLAGS: -Icommon
+// #cgo LDFLAGS: -lsystemd
 // #include "linux/antidbg.h"
 // #include "linux/antivm.h"
 // #include "common/cpuid.h"

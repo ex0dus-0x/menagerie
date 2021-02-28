@@ -18,6 +18,7 @@ Cross-platform malware development library for anti-analysis techniques.
 | Breakpoint             | SIGTRAP       | WIP                       | WIP      |
 | Process Fingerprinting | Procfs        | WIP                       | WIP      |
 | Memory Fingerprinting  | Heap Relocate | WIP                       | WIP      |
+| Others                 | eBPF Detect   |                           |          |
 
 
 ### Anti-Virtualization
@@ -43,5 +44,4 @@ Note that Windows detection techniques should all be MinGW-compliant!
 
 ## Future Goals
 
-* Linux: eBPF debugger detection
 * Advanced: Anti-EDR / Anti-ML
