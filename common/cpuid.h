@@ -36,9 +36,9 @@ bool CheckCPUID(void)
 
     // second check: flag
     eax = 0x1;
-    unsigned int *ebx, *ebx, *ecx, *edx;
-    cpuid(&eax, ebx, ecx, edx);
-    if ((ecx & (1 << 31)) >> 31)
+    unsigned int *ecx;
+    cpuid(&eax, NULL, ecx, NULL);
+    if ((*ecx & (1 << 31)) >> 31)
         return true;
 
     return false;
