@@ -27,6 +27,10 @@ func CheckDebuggerPEB() bool {
     return bool(C.CheckDebuggerPEB())
 }
 
+func CheckBreakpoint() bool {
+    return bool(C.CheckBreakpoint())
+}
+
 /*=========================== ANTI-SANDBOXING ===========================*/
 
 // Main routine to call to execute all known sandbox/VM detection heuristics.

@@ -12,14 +12,12 @@ Cross-platform malware development library for anti-analysis techniques.
 
 ### Anti-Debugging
 
-|                        | Linux         | Windows                   | macOS    |
+| Technique              | Linux         | Windows                   | macOS    |
 |------------------------|---------------|---------------------------|----------|
-| Basic / Standard       | `ptrace`      | Process Environment Block | `ptrace` |
+| Basic                  | `ptrace`      | Process Environment Block | `ptrace` |
 | Breakpoint             | SIGTRAP       | WIP                       | WIP      |
 | Process Fingerprinting | Procfs        | WIP                       | WIP      |
 | Memory Fingerprinting  | Heap Relocate | WIP                       | WIP      |
-| Others                 | eBPF Detect   |                           |          |
-
 
 ### Anti-Virtualization
 
@@ -35,13 +33,14 @@ Cross-platform malware development library for anti-analysis techniques.
 | Impossible Disassembly | ❌     | ✔️      | ❌    |
 
 
+### Anti-Telemetry
+
+| Technology             | Platform      | Technique           |
+|------------------------|---------------|---------------------|
+| eBPF                   | Linux         | journald BPF check  | 
+
 ### Contributing
 
 Have another technique you want curated? Create a pull request!
 
 Note that Windows detection techniques should all be MinGW-compliant!
-
-
-## Future Goals
-
-* Advanced: Anti-EDR / Anti-ML
