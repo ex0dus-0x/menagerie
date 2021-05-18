@@ -13,10 +13,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-/* requires linking, re-implement to get rid of */
-#ifdef ANTI_TELEMETRY
 #include <systemd/sd-journal.h>
-#endif
 
 /* const flag set when signal handling */
 static int isDebugged = 1;
@@ -88,14 +85,6 @@ bool CheckProcessHeapRelocate(void)
     return true;
 }
 
-/* TODO: check readlink */
-bool CheckCallerName(void)
-{
-    char *real = realpath(".", "");
-    return false;
-}
-
-#ifdef ANTI_TELEMETRY
 bool CheckEBPFTracer(void)
 {
     /* open new journal object */
@@ -163,6 +152,4 @@ bool CheckEBPFTracer(void)
     }
     return false;
 }
-#endif
-
 #endif

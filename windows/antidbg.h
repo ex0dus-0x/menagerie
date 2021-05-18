@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 #include <winternl.h>
+#include <processthreadsapi.h>
+#include <excpt.h>
 
 bool CheckDebuggerPEB(void)
 {
@@ -53,7 +55,32 @@ bool CheckDebuggerPEB(void)
     return false;
 }
 
-bool CheckBreakpoints(void)
+
+long CALLBACK
+handler(EXCEPTION_POINTERS *pointers)
+{
+    switch (pointers->ExceptionRecord->ExceptionCode) {
+    case EXCEPTION_BREAKPOINT:
+        return EXCEPTION_EXECUTE_HANDLER;
+    default:
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+}
+
+// Mingw's GNU-style exception handling
+bool CheckBreakpoint(void)
+{
+    __try1 (handler) {
+        __asm__ ("int3");
+    } __except1 {
+        return false;
+    }
+    return true;
+}
+
+// Iterate over context debug registers to check if any are set, signifying
+// hardware breakpoints used to halt execution.
+bool CheckHardwareBreakpoints(void)
 {
     CONTEXT ctx;
     ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
@@ -61,5 +88,4 @@ bool CheckBreakpoints(void)
         return false;
     return ctx.Dr0 || ctx.Dr1 || ctx.Dr2 || ctx.Dr3;
 }
-
 #endif
