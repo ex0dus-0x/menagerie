@@ -18,9 +18,8 @@ cpuid(unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx
 }
 
 
-bool CheckCPUID(void)
+bool CheckCPUIDHypervisor(void)
 {
-    // first check: hypervisor vendor
     char name[13];
     name[12] = 0;
 
@@ -33,9 +32,12 @@ bool CheckCPUID(void)
         if (inline_strncmp(name, hypervisors[i], 12) == 0)
             return true;
     }
+    return false;
+}
 
-    // second check: flag
-    eax = 0x1;
+bool CheckCPUIDIsVM(void)
+{
+    unsigned eax = 0x1;
     unsigned int *ecx;
     cpuid(&eax, NULL, ecx, NULL);
     if ((*ecx & (1 << 31)) >> 31)

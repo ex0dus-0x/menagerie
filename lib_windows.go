@@ -3,20 +3,10 @@ package menagerie
 // #cgo CFLAGS: -Icommon
 // #include "windows/antidbg.h"
 // #include "windows/antivm.h"
-// #include "windows/antidisass.h"
 // #include "common/cpuid.h"
 import "C"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
-
-// Main routine to call to execute all known debugger detection heuristics.
-//  - Process Environment Block
-//  - Breakpoint Check
-func AntiDebugging() bool {
-    return CheckDebuggerPEB()
-}
-
-//// WRAPPERS ////
 
 // Checks the state of the Process Environment Block for the
 // following properties for the presence of a debugger:
@@ -33,22 +23,10 @@ func CheckBreakpoint() bool {
 
 /*=========================== ANTI-SANDBOXING ===========================*/
 
-// Main routine to call to execute all known sandbox/VM detection heuristics.
-//  - CPUID hypervisor check
-func AntiVM() bool {
-    return CheckCPUIDHypervisor()
+func CheckCPUIDIsVM() bool {
+    return bool(C.CheckCPUIDIsVM())
 }
-
-//// WRAPPERS ////
 
 func CheckCPUIDHypervisor() bool {
     return bool(C.CheckCPUIDHypervisor())
-}
-
-/*=========================== ANTI-DISASSEMBLY ===========================*/
-
-// Injects tricky inlined assembly at any point of execution to confuse disassembler
-// and emit confusing disassembly.
-func AntiDisassembly() {
-    C.AntiDisassembly()
 }

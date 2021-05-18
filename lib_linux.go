@@ -9,18 +9,8 @@ import "C"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
-// Main routine to call to execute all known debugger detection heuristics.
-//  - Ptrace
-//  - Breakpoint Handler Detection
-//  - Procfs Fingerprinting
-func AntiDebugging() bool {
-    return CheckProcessFingerprint() || CheckBreakpoint() || CheckBasicPtrace() || CheckProcessHeapRelocate()
-}
-
-//// WRAPPERS ////
-
 // Most basic Linux anti-debugging call with PTRACE_TRACEME.
-func CheckBasicPtrace() bool {
+func CheckDebuggerBasic() bool {
     return bool(C.CheckBasicPtrace())
 }
 
@@ -37,28 +27,16 @@ func CheckProcessFingerprint() bool {
 
 // Checks to see if the debugger has relocated the heap segment elsewhere by allocating space
 // and checking memory offset.
-func CheckProcessHeapRelocate() bool {
+func CheckMemoryFingerprint() bool {
     return bool(C.CheckProcessHeapRelocate())
 }
 
-// TODO: check parent name with readlink
-
 /*=========================== ANTI-SANDBOXING ===========================*/
 
-// Main routine to call to execute all known sandbox/VM detection heuristics.
-func AntiVM() bool {
-    return CheckCPUID()
+func CheckCPUIDIsVM() bool {
+    return bool(C.CheckCPUIDIsVM())
 }
 
-//// WRAPPERS ////
-
-func CheckCPUID() bool {
-    return bool(C.CheckCPUID())
-}
-
-/*=========================== ANTI-DISASSEMBLY ===========================*/
-
-// Injects tricky inlined assembly at any point of execution to confuse disassembler
-// and emit confusing disassembly.
-func AntiDisassembly() {
+func CheckCPUIDHypervisor() bool {
+    return bool(C.CheckCPUIDHypervisor())
 }
