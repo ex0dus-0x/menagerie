@@ -1,7 +1,6 @@
 package menagerie
 
-// #cgo CFLAGS: -Isrc
-// #cgo LDFLAGS: -lsystemd
+// #cgo CFLAGS: -Ilib
 // #include "antidbg.h"
 // #include "antivm.h"
 import "C"
