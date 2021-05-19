@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-bool CheckDebugBasic(void);
+bool CheckDebuggerBasic(void);
 
 /* Breakpoint checks */
 bool ThrowBreakpointExcept(void);

@@ -2,6 +2,9 @@
 #define ANTIVM_H
 
 #include <stdbool.h>
-#include <string.h>
+
+bool CheckCPUIDIsVM(void);
+
+bool CheckCPUIDHypervisor(void);
 
 #endif
