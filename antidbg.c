@@ -4,7 +4,7 @@
 #include <excpt.h>
 #include <processthreadsapi.h>
 
-#elif defined(__UNIX__)
+#elif defined(__unix__)
 
 #include <stdlib.h>
 #include <string.h>
@@ -30,16 +30,17 @@
 #include "antidbg.h"
 
 // global flag to switch when exception handler is triggered
-#ifdef __UNIX__
+#ifdef __unix__
 static bool isDebugged = true;
 #elif defined(__APPLE__)
 static bool isDebugged = false;
 #endif
 
-#if defined(__UNIX__) || defined(__APPLE__)
+/* Callback for exception handling a variety of debugger detections */
+#if defined(__unix__) || defined(__APPLE__)
 static void except_handler(int sig)
 {
-#ifdef __UNIX__
+#ifdef __unix__
     isDebugged = false;
     signal(SIGTRAP, SIG_DFL);
 #elif defined(__APPLE__)
@@ -60,8 +61,10 @@ except_handler(EXCEPTION_POINTERS *pointers)
 #endif
 
 
+/* Runs basic most rudimentary debugger check for every operating system */
 bool CheckDebuggerBasic(void)
 {
+    // Enumerate debug flags on the PEB
 #if defined(_WIN32) || defined(_WIN64)
 
     // parse out the PEB from FS or GS offsets
@@ -106,7 +109,7 @@ bool CheckDebuggerBasic(void)
         return true;
     return false;
     
-#elif defined(__UNIX__)
+#elif defined(__unix__)
 
     if (ptrace(PTRACE_TRACEME, 0, NULL, 0) == -1)
         return true;
@@ -131,12 +134,16 @@ bool ThrowBreakpointExcept(void)
     }
     return true;
 
-#elif defined(__UNIX__) || defined(__APPLE__)
+#elif defined(__unix__) || defined(__APPLE__)
 
     signal(SIGTRAP, except_handler);
     raise(SIGTRAP);
-    return isDebugged;
 
+#if defined(__unix__)
+    return isDebugged;
+#elif defined(__APPLE__)
+    return !isDebugged;
+#endif
 #endif
 }
 
@@ -173,9 +180,10 @@ bool BreakpointChecksumAt(void)
     return false;
 }
 
+/* Iterate over context debug registers to check if any are set, signifying
+ * hardware breakpoints used to halt execution.
+ */
 #if defined(_WIN32) || defined(_WIN64)
-// Iterate over context debug registers to check if any are set, signifying
-// hardware breakpoints used to halt execution.
 bool CheckHardwareBreakpoints(void)
 {
     CONTEXT ctx;
@@ -189,10 +197,50 @@ bool CheckHardwareBreakpoints(void)
 
 bool CheckMemoryFingerprint(void)
 {
-    return false;
+#if defined(__unix__)
+    static unsigned char bss;
+    unsigned char *probe = malloc(0x10);
+
+    // check if heap allocated region is in higher memory address range
+    // that denotes that it hasn't been manually relocated.
+    if (probe - &bss > 0x20000)
+        return false;
+
+    return true;
+#endif
 }
 
 bool CheckParentTracer(void)
 {
+#if defined(__unix__)
+    // open procfs path to parse metadata about process
+    char procpath[] = "/proc/self/status";
+    int fd = open(procpath, O_RDONLY);
+    if (fd == -1)
+        return false;
+
+    // read file into buffer
+    char buffer[4096];
+    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    if (bytes <= 0)
+        return false;
+    buffer[bytes] = '\0';
+
+    // check if tracer key is in configuration
+    char tracer[] = "TracerPid:";
+    char *bufptr = strstr(buffer, tracer);
+    if (!bufptr)
+        return false;
+
+    // check to see if value set is 0 for no debugger
+    for (char *ptr = bufptr + sizeof(tracer) - 1; ptr <= buffer + bytes; ++ptr)
+    {
+        if (isspace(*ptr))
+            continue;
+        else
+            return isdigit(*ptr) != 0 && *ptr != '0';
+    }
+#endif
+
     return false;
 }
