@@ -29,7 +29,7 @@ func CheckHardwareBreakpoints() // win only!
 func CheckMemoryFingerprint()
 
 // Parent Process Fingerprinting
-func CheckProcfsFingerprint() // linux only!
+func CheckParentTracer()
 ```
 
 ### Virtual Machine Detection:
