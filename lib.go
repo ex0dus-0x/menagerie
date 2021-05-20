@@ -1,15 +1,40 @@
 package menagerie
 
-// Runs cross-platform anti-debug detection, and run a callback routine if debugging is detected.
-func AntiDebuggingCb(cb func()) {
-    if AntiDebugging() == true {
-        cb()
-    }
+// #cgo CFLAGS: -Ilib
+// #include "antidbg.h"
+// #include "antivm.h"
+import "C"
+
+/*=========================== ANTI-DEBUGGING ===========================*/
+
+func CheckDebuggerBasic() bool {
+    return bool(C.CheckDebuggerBasic())
 }
 
-// Runs cross-platform anti-sandbox detection, and run a callback routine if debugging is detected.
-func AntiVMCb(cb func()) {
-    if AntiVM() == true {
-        cb()
-    }
+func ThrowBreakpointExcept() bool {
+    return bool(C.ThrowBreakpointExcept())
 }
+
+func BreakpointChecksumAt() bool {
+    return bool(C.BreakpointChecksumAt())
+}
+
+func CheckMemoryFingerprint() bool {
+    return bool(C.CheckMemoryFingerprint())
+}
+
+func CheckParentTracer() bool {
+    return bool(C.CheckParentTracer())
+}
+
+/*=========================== ANTI-VM ===========================*/
+
+func CheckCPUIDIsVM() bool {
+    return bool(C.CheckCPUIDIsVM())
+}
+
+func CheckCPUIDHypervisor() bool {
+    return bool(C.CheckCPUIDHypervisor())
+}
+
+/*=========================== ANTI-SANDBOX ===========================*/

@@ -5,42 +5,49 @@ Cross-platform malware development library for anti-analysis techniques.
 ## Design Goals
 
 * Provide a rich and convenient interface for defensive evasion for Golang, a popular choice for red teams and malware engineers.
-* Incorporate "defensive software development" (ie. minimizing `call`s, confusing control flow) to make reverse engineering even more difficult
 * Use as a learning resource for both attack and mitigation, and a collaborative project to contribute new techniques
 
 ## Techniques Supported
 
-### Anti-Debugging
+### Debugger Detection:
 
-| Technique              | Linux         | Windows                   | macOS    |
-|------------------------|---------------|---------------------------|----------|
-| Basic                  | `ptrace`      | Process Environment Block | `ptrace` |
-| Breakpoint             | SIGTRAP       | WIP                       | WIP      |
-| Process Fingerprinting | Procfs        | WIP                       | WIP      |
-| Memory Fingerprinting  | Heap Relocate | WIP                       | WIP      |
+```go
+// Most standard debugger checks for each platform
+func CheckDebuggerBasic()
 
-### Anti-Virtualization
+// Breakpoints: exception and checksums
+func CheckThrowBreakpoint()
+func CheckBreakpointAt(func)
+func CheckHardwareBreakpoints() // win only!
 
-|               | Linux   | Windows | macOS   |
-|---------------|---------|---------|---------|
-| CPU Profiling | `cpuid` | `cpuid` | sysctl  |
+// Enumerate vmmaps for debugger being loaded
+func CheckMemoryFingerprint()
 
+// Parent Process Fingerprinting
+func CheckParentTracer()
+```
 
-### Anti-Disassembly
+### Virtual Machine Detection:
 
-|                        | Linux | Windows | macOS |
-|------------------------|-------|---------|-------|
-| Impossible Disassembly | ❌     | ✔️      | ❌    |
+```go
+// Profile CPUID for VM features
+func CheckCPUIDIsVM()
+func CheckCPUIDHypervisor()
+```
 
+### Sandbox Detection
 
-### Anti-Telemetry
+```go
+```
 
-| Technology             | Platform      | Technique           |
-|------------------------|---------------|---------------------|
-| eBPF                   | Linux         | journald BPF check  | 
+### Telemetry Monitoring Detection:
 
-### Contributing
+```go
+
+// Linux Only - requires dynamically linking journald
+func CheckEbpfTracer()
+```
+
+## Contributing
 
 Have another technique you want curated? Create a pull request!
-
-Note that Windows detection techniques should all be MinGW-compliant!

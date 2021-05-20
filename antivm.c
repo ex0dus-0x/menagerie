@@ -1,10 +1,23 @@
-/*
- * cpuid.h
- * 
- *      Cross-plaform support for CPUID profiling. Used for hypervisor detection in
- *      Unix and MinGW Windows.
- */
-#include "deps.h"
+#include <stdlib.h>
+#include "antivm.h"
+
+/* Re-implementation of BSD-style strncmp */
+static inline int
+inline_strncmp(const char *s1, const char *s2, size_t n)
+{
+    if (n == 0)
+        return 0;
+
+    do {
+        if (*s1 != *s2++)
+            return (*(const unsigned char *)s1 - *(const unsigned char *)(s2 - 1));
+
+        if (*s1++ == 0)
+            break;
+
+    } while (--n != 0);
+    return 0;
+}
 
 static inline void
 cpuid(unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx)

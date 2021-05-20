@@ -2,25 +2,20 @@
 package main
 
 import (
-    "os"
     "fmt"
     "github.com/ex0dus-0x/menagerie"
 )
 
 func init() {
     fmt.Println("Performing anti-debug checks...")
-    if menagerie.AntiDebugging() == true {
-        fmt.Println("Debugger detected!")
-        os.Exit(-1)
+    if res := menagerie.CheckDebuggerBasic(); res != false {
+        fmt.Println("CheckDebuggerBasic - Caught!")
     }
-
-    if menagerie.AntiVM() == true {
-        fmt.Println("Hypervisor/sandbox detected!")
-        os.Exit(-1)
+    if res := menagerie.ThrowBreakpointExcept(); res != false {
+        fmt.Println("ThrowBreakpointExcept - Caught!")
     }
 }
 
 func main() {
-    menagerie.AntiDisassembly()
     fmt.Println("Starting the program...")
 }
