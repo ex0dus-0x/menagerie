@@ -2,11 +2,6 @@
 
 Cross-platform malware development library for anti-analysis techniques.
 
-## Introduction
-
-Similiar to the reference guides put out by Checkpoint [here](https://evasions.checkpoint.com/) and
-[here](anti-debug.checkpoint.com/),
-
 ## Design Goals
 
 * Provide a rich and convenient interface for defensive evasion for Golang, a popular choice for red teams and malware engineers.
