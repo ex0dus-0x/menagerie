@@ -17,7 +17,6 @@ func CheckDebuggerBasic()
 
 // Breakpoints: exception and checksums
 func CheckThrowBreakpoint()
-func CheckBreakpointAt(func)
 func CheckHardwareBreakpoints() // win only!
 
 // Enumerate vmmaps for debugger being loaded
