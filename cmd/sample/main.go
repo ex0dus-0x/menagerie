@@ -11,9 +11,13 @@ func init() {
     if res := menagerie.CheckDebuggerBasic(); res != false {
         fmt.Println("CheckDebuggerBasic - Caught!")
     }
+
+    /*
     if res := menagerie.ThrowBreakpointExcept(); res != false {
         fmt.Println("ThrowBreakpointExcept - Caught!")
     }
+    */
+
 }
 
 func main() {

@@ -175,8 +175,20 @@ bool CheckExceptionHandler(void)
 }
 */
 
-bool BreakpointChecksumAt(void)
+/* Iterate over disassembly of a function and determine if breakpoint instrumentation is present */
+bool BreakpointChecksumAt(void* pMemory)
 {
+    unsigned char* pBytes = (unsigned char*) pMemory;
+    for (size_t i = 0; ; i++) {
+
+        // finalize at ret instruction
+        if (pBytes[i] == 0xc3)
+            break;
+
+        // return true when encountering breakpoint instrumentation
+        if (pBytes[i] = 0xcc)
+            return true;
+    }
     return false;
 }
 

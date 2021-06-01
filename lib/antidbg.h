@@ -7,7 +7,7 @@ bool CheckDebuggerBasic(void);
 
 /* Breakpoint checks */
 bool ThrowBreakpointExcept(void);
-bool BreakpointChecksumAt();
+bool BreakpointChecksumAt(void* pMemory);
 
 #if defined(_WIN32) || defined(_WIN64)
 bool CheckHardwareBreakpoints(void);

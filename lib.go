@@ -4,6 +4,7 @@ package menagerie
 // #include "antidbg.h"
 // #include "antivm.h"
 import "C"
+import "unsafe"
 
 /*=========================== ANTI-DEBUGGING ===========================*/
 
@@ -15,8 +16,8 @@ func ThrowBreakpointExcept() bool {
     return bool(C.ThrowBreakpointExcept())
 }
 
-func BreakpointChecksumAt() bool {
-    return bool(C.BreakpointChecksumAt())
+func BreakpointChecksumAt(ptr interface{}) bool {
+    return bool(C.BreakpointChecksumAt(unsafe.Pointer(&ptr)))
 }
 
 func CheckMemoryFingerprint() bool {

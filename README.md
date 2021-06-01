@@ -17,7 +17,8 @@ func CheckDebuggerBasic()
 
 // Breakpoints: exception and checksums
 func CheckThrowBreakpoint()
-func CheckHardwareBreakpoints() // win only!
+func BreakpointChecksumAt(ptr interface{})
+func CheckHardwareBreakpoints() // Win only!
 
 // Enumerate vmmaps for debugger being loaded
 func CheckMemoryFingerprint()
