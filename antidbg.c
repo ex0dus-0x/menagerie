@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #if defined(_WIN32) || defined(_WIN64)
 
 #include <winternl.h>
@@ -6,7 +8,6 @@
 
 #elif defined(__unix__)
 
-#include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -42,7 +43,7 @@ static void except_handler(int sig)
 {
 #ifdef __unix__
     isDebugged = false;
-    signal(SIGTRAP, SIG_DFL);
+    //signal(SIGTRAP, SIG_DFL);
 #elif defined(__APPLE__)
     isDebugged = true;
 #endif
@@ -66,6 +67,8 @@ bool CheckDebuggerBasic(void)
 {
     // Enumerate debug flags on the PEB
 #if defined(_WIN32) || defined(_WIN64)
+
+    // TODO: big-brain, check if PEB structure itself was patched before hand as a sanity
 
     // parse out the PEB from FS or GS offsets
     PPEB pPeb;
@@ -137,7 +140,7 @@ bool ThrowBreakpointExcept(void)
 #elif defined(__unix__) || defined(__APPLE__)
 
     signal(SIGTRAP, except_handler);
-    raise(SIGTRAP);
+    __asm__("int3");
 
 #if defined(__unix__)
     return isDebugged;
@@ -176,9 +179,9 @@ bool CheckExceptionHandler(void)
 */
 
 /* Iterate over disassembly of a function and determine if breakpoint instrumentation is present */
-bool BreakpointChecksumAt(void* pMemory)
+bool BreakpointChecksumAt(void* function)
 {
-    unsigned char* pBytes = (unsigned char*) pMemory;
+    unsigned char* pBytes = (unsigned char*) function;
     for (size_t i = 0; ; i++) {
 
         // finalize at ret instruction
@@ -186,7 +189,11 @@ bool BreakpointChecksumAt(void* pMemory)
             break;
 
         // return true when encountering breakpoint instrumentation
-        if (pBytes[i] = 0xcc)
+#if defined(_WIN32) || defined(_WIN64)
+        if (pBytes[i] == 0xcc)
+#else
+        if (pBytes[i] & 0xff == 0xcc)
+#endif
             return true;
     }
     return false;
@@ -207,9 +214,9 @@ bool CheckHardwareBreakpoints(void)
 #endif
 
 
+/* Introspects current memory-mapping to see if any image relocations were manually done by a debugger */
 bool CheckMemoryFingerprint(void)
 {
-#if defined(__unix__)
     static unsigned char bss;
     unsigned char *probe = malloc(0x10);
 
@@ -219,9 +226,9 @@ bool CheckMemoryFingerprint(void)
         return false;
 
     return true;
-#endif
 }
 
+/* Use operaing system facilities to query whether or not a parent tracer process exists */
 bool CheckParentTracer(void)
 {
 #if defined(__unix__)
@@ -239,6 +246,7 @@ bool CheckParentTracer(void)
     buffer[bytes] = '\0';
 
     // check if tracer key is in configuration
+    // TODO: self implementation of strstr
     char tracer[] = "TracerPid:";
     char *bufptr = strstr(buffer, tracer);
     if (!bufptr)

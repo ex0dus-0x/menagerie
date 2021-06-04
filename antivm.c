@@ -30,6 +30,11 @@ cpuid(unsigned int *eax, unsigned int *ebx, unsigned int *ecx, unsigned int *edx
         : "0" (*eax), "2" (*ecx));
 }
 
+static inline void
+process_exists(char *name)
+{
+}
+
 
 bool CheckCPUIDHypervisor(void)
 {
@@ -56,5 +61,11 @@ bool CheckCPUIDIsVM(void)
     if ((*ecx & (1 << 31)) >> 31)
         return true;
 
+    return false;
+}
+
+
+bool CheckVMProcesses(void) 
+{
     return false;
 }

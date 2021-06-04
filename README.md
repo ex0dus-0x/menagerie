@@ -20,7 +20,7 @@ func CheckThrowBreakpoint()
 func BreakpointChecksumAt(ptr interface{})
 func CheckHardwareBreakpoints() // Win only!
 
-// Enumerate vmmaps for debugger being loaded
+// Process Mappings Check
 func CheckMemoryFingerprint()
 
 // Parent Process Fingerprinting
@@ -33,11 +33,9 @@ func CheckParentTracer()
 // Profile CPUID for VM features
 func CheckCPUIDIsVM()
 func CheckCPUIDHypervisor()
-```
 
-### Sandbox Detection
-
-```go
+// VM Process Enumeration (WIP)
+func CheckVMProcesses()
 ```
 
 ### Telemetry Monitoring Detection:
